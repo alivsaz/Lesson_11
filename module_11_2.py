@@ -35,12 +35,15 @@ human = Human(input_name, input_age)
 
 def introspection_info(object):
     dict_info = {}
-    dict_info['ID'] = id(object)
-    dict_info['type'] = type(object)
-    dict_info['attributes'] = object.__getattribute__
-    dict_info['methods'] = dir(object)
-    if hasattr(object, '__module__'):
-        dict_info['module'] = object.__module__
+    try:
+        dict_info['ID'] = id(object)
+        dict_info['type'] = type(object)
+        dict_info['attributes'] = vars(object)
+        dict_info['methods'] = [element for element in dir(object.__getattribute__) if callable(element) == False]
+        if hasattr(object, '__module__'):
+            dict_info['module'] = object.__module__
+    except (TypeError, AttributeError):
+        pass
     return dict_info
 
 str_info = introspection_info(input_name)
